@@ -3,6 +3,7 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const connectDB = require("./db/connectDB");
 const router = require("./routes/userRoute");
+const imgRouter = require("./routes/imageRoute");
 
 dotenv.config();
 
@@ -17,6 +18,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/user", router);
+app.use("/api/image", imgRouter);
 
 app.listen(port, () => {
     console.log(`Port is running on ${port}`);

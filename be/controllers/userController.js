@@ -38,7 +38,8 @@ const registerUser = async(req, res) => {
         return res.status(200).json({
             msg: "User registered successfully",
             token: token,
-            user: {name: user.name}
+            user: {name: user.name},
+            success: true
         })
     } catch (error) {
         return res.status(500).json({
@@ -87,8 +88,29 @@ const loginUser = async(req, res) => {
             success: false
         });
     }
-    
+}
 
+const userCredits = async(req, res) => {
+    try {
+        const { userId } = req.body;
+
+        const user = await userModel.findById(userId);
+        if(!user) {
+            return res.status(404).json({
+                msg: "User not found"
+            });
+        }
+        res.json({
+            credits: user.creditBalance,
+            user: {name: user.name},
+            success: true
+        });
+
+    } catch (error) {
+        return res.status(500).json({
+            msg: error.message || error
+        })
+    }
 }
 
 
@@ -96,6 +118,5 @@ const loginUser = async(req, res) => {
 module.exports = {
     registerUser,
     loginUser,
+    userCredits,
 }
-
-/* 4.20 */
