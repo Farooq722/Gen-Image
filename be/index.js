@@ -11,7 +11,14 @@ const port = process.env.PORT || 4000;
 const app = express();
 
 app.use(express.json());
-app.use(cors());
+
+const corsOptions = {
+    origin: "https://gen-image-fe.vercel.app", // Your frontend URL
+    methods: "GET, POST, PUT, DELETE",
+    allowedHeaders: "Content-Type, Authorization"
+  };
+  
+  app.use(cors(corsOptions));
 
 app.get("/", (req, res) => {
     res.send("Backend working");
