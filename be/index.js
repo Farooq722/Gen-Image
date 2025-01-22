@@ -12,16 +12,17 @@ const app = express();
 
 app.use(express.json());
 
-const corsOptions = {
-    origin: process.env.NODE_ENV === "production"
-      ? "https://gen-image-fe.vercel.app"
-      : "http://localhost:3000",
-    methods: "GET, POST, PUT, DELETE",
-    allowedHeaders: "Content-Type, Authorization",
-  };
+// const corsOptions = {
+//     origin: process.env.NODE_ENV === "production"
+//       ? "https://gen-image-fe.vercel.app"
+//       : "http://localhost:4000",
+//     methods: "GET, POST, PUT, DELETE",
+//     allowedHeaders: "Content-Type, Authorization",
+//   };
   
   
-  app.use(cors(corsOptions));
+app.use(cors({ origin: '*' }));
+
 
 app.get("/", (req, res) => {
     res.send("Backend working");
