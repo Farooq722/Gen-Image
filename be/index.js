@@ -10,16 +10,49 @@ dotenv.config();
 const port = process.env.PORT || 4000;
 const app = express();
 
-const corsOptions = {
-    origin: ["http://localhost:5173", "https://gen-image-fe.vercel.app"],
-    credentials: true,
-    methods: ["GET", "POST", "PUT"],
-    allowedHeaders: ["X-CSRF-Token", "X-Requested-With", "Accept", "Accept-Version", "Content-Length", "Content-MD5", "Content-Type", "Date", "X-Api-Version", "Authorization"],
-    optionsSuccessStatus: 200
-};
+app.use((req, res, next) => {
+    res.header("Access-Control-Allow-Origin", req.headers.origin || "*");
+    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+    res.header(
+      "Access-Control-Allow-Headers",
+      "Content-Type, Authorization, X-Requested-With, X-CSRF-Token"
+    );
+    if (req.method === "OPTIONS") {
+      return res.status(200).end();
+    }
+    next();
+  });
+  
 
-app.use(cors(corsOptions));
-app.options("*", cors(corsOptions));
+const allowedOrigins = [
+    "http://localhost:5173", // Local development frontend
+    "https://gen-image-fe.vercel.app" // Production frontend
+  ];
+  
+  const corsOptions = {
+    origin: (origin, callback) => {
+      // Allow requests with no origin (like mobile apps or Postman)
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true, // Allow cookies or authorization headers
+    methods: ["GET", "POST", "PUT", "DELETE"], // Allowed methods
+    allowedHeaders: [
+      "Content-Type",
+      "Authorization",
+      "X-Requested-With",
+      "Accept",
+      "X-CSRF-Token"
+    ],
+    optionsSuccessStatus: 200
+  };
+  
+  app.use(cors(corsOptions));
+  app.options("*", cors(corsOptions));
+  
 
 app.use(express.json());
 
