@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 const Login = () => {
   const [state, setState] = useState("Login");
   const { setShowLogin, backend_url, setToken, setUser } = useContext(AppContext);
-  /* */
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
