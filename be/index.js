@@ -11,14 +11,16 @@ const port = process.env.PORT || 4000;
 const app = express();
 
 const corsOptions = {
-    origin: "https://gen-image-fe.vercel.app",
+    origin: ["http://localhost:5173", "https://gen-image-fe.vercel.app"],
     credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+    methods: ["GET", "POST", "PUT"],
     allowedHeaders: ["X-CSRF-Token", "X-Requested-With", "Accept", "Accept-Version", "Content-Length", "Content-MD5", "Content-Type", "Date", "X-Api-Version", "Authorization"],
     optionsSuccessStatus: 200
 };
 
 app.use(cors(corsOptions));
+app.options("*", cors(corsOptions));
+
 app.use(express.json());
 
 app.get("/", (req, res) => {

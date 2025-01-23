@@ -18,36 +18,49 @@ const Login = () => {
 
     try {
       
-      if(state === 'Login') {
-        const { data } = await axios.post(`${backend_url}/api/user/login`, {
-          email,
-          password
-        })
-        if(data.success) {
-          setToken(data.token);
-          setUser(data.user)
-          localStorage.setItem('token', data.token);
-          setShowLogin(false)
-        }
-        else {
-          toast.error(data.message);
-        }
-      } else {
-          const { data } = await axios.post(`${backend_url}/api/user/register`, {
-            name,
-            email,
-            password
-          })
-          if(data.success) {
+      if (state === "Login") {
+        try {
+          const { data } = await axios.post(
+            `${backend_url}/api/user/login`,
+            { email, password },
+            {
+              headers: {
+                "Content-Type": "application/json",
+              },
+              withCredentials: true, // Required if you're using credentials
+            }
+          );
+
+          if (data.success) {
             setToken(data.token);
-            setUser(data.user)
-            localStorage.setItem('token', data.token);
-            setShowLogin(false)
-          }
-          else {
+            setUser(data.user);
+            localStorage.setItem("token", data.token);
+            setShowLogin(false);
+          } else {
             toast.error(data.message);
           }
-      }
+        } catch (error) {
+          toast.error(error.response?.data?.message || error.message);
+        }
+      } else {
+        try {
+          const { data } = await axios.post(
+            `${backend_url}/api/user/register`, 
+            { name, email, password },
+            { headers: { "Content-Type": "application/json" } } 
+          );
+          if (data.success) {
+            setToken(data.token);
+            setUser(data.user);
+            localStorage.setItem("token", data.token);
+            setShowLogin(false);
+          } else {
+            toast.error(data.message);
+          }
+        } catch (error) {
+          toast.error(error.response?.data?.message || error.message);
+        }
+      }      
 
     } catch (error) {
       toast.error(error.message);
