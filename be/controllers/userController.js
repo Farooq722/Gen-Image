@@ -100,7 +100,7 @@ const userCredits = async(req, res) => {
                 msg: "User not found"
             });
         }
-        res.json({
+        res.status(200).json({
             credits: user.creditBalance,
             user: {name: user.name},
             success: true

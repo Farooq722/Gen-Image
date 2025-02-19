@@ -10,12 +10,15 @@ const app = express();
 app.use(express.urlencoded({ extended: true }));
 
 const corsOptions = {
-  origin: 'https://gen-image-fe.vercel.app',
+  origin: "https://gen-image-fe.vercel.app",
   methods: ["GET", "POST", "PUT", "DELETE"],
-  credentials: true
-}
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true,
+};
 
 app.use(cors(corsOptions));
+app.options("*", cors(corsOptions)); 
+
 const port = process.env.PORT || 4000;
 
 app.use(express.json());
