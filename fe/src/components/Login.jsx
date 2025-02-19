@@ -27,7 +27,7 @@ const Login = () => {
               headers: {
                 "Content-Type": "application/json",
               },
-              withCredentials: true, // Required if you're using credentials
+              withCredentials: true, 
             }
           );
 
@@ -47,7 +47,9 @@ const Login = () => {
           const { data } = await axios.post(
             `${BACKEND_API_END_POINT}/api/user/register`, 
             { name, email, password },
-            { headers: { "Content-Type": "application/json" } } 
+            { headers: { "Content-Type": "application/json" },
+              withCredentials: true
+          } 
           );
           if (data.success) {
             setToken(data.token);
