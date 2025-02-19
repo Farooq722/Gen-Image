@@ -9,41 +9,60 @@ dotenv.config();
 const app = express();
 app.use(express.urlencoded({ extended: true }));
 
+// Define allowed origins (Production + Development)
+const allowedOrigins = ["https://gen-image-fe.vercel.app", "http://localhost:5173"];
+
 const corsOptions = {
-  origin: "https://gen-image-fe.vercel.app",
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true,
 };
 
 app.use(cors(corsOptions));
-app.options("*", cors(corsOptions)); 
+app.options("*", cors(corsOptions));
 
+// Middleware to handle CORS headers
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "https://gen-image-fe.vercel.app");
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin)) {
+    res.header("Access-Control-Allow-Origin", origin);
+  }
   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
   res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
   res.header("Access-Control-Allow-Credentials", "true");
 
   if (req.method === "OPTIONS") {
-      return res.status(200).send("OK");
+    return res.status(200).send("OK");
   }
 
   next();
 });
 
+// Set port from environment or default to 4000
 const port = process.env.PORT || 4000;
 
 app.use(express.json());
 
+// Default route to check if backend is running
 app.get("/", (req, res) => {
-    res.send("Backend working");
+  res.send("Backend working");
 });
 
-app.use("/api/user", cors(corsOptions), router);
-app.use("/api/image", cors(corsOptions),  imgRouter);
+// Routes
+app.use("/api/user", router);
+app.use("/api/image", imgRouter);
 
+// Start the server
 app.listen(port, () => {
-    console.log(`Port is running on ${port}`);
+  console.log(`Server is running on port ${port}`);
 });
+
+// Connect to database
 connectDB();
