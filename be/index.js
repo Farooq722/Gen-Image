@@ -27,8 +27,8 @@ app.get("/", (req, res) => {
     res.send("Backend working");
 });
 
-app.use("/api/user", router);
-app.use("/api/image", imgRouter);
+app.use("/api/user", cors(corsOptions), router);
+app.use("/api/image", cors(corsOptions),  imgRouter);
 
 app.listen(port, () => {
     console.log(`Port is running on ${port}`);
