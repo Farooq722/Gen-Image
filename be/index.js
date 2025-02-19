@@ -7,6 +7,7 @@ const imgRouter = require("./routes/imageRoute");
 
 dotenv.config();
 const app = express();
+app.use(express.urlencoded({ extended: true }));
 
 const corsOptions = {
   origin: 'https://gen-image-fe.vercel.app',
