@@ -1,0 +1,1 @@
+export const BACKEND_API_END_POINT="https://gen-image-be.vercel.app"

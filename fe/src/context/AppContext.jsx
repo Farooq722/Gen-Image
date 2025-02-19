@@ -2,7 +2,7 @@ import { createContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import axios  from 'axios'
 import { useNavigate } from 'react-router-dom';
-
+import { BACKEND_API_END_POINT } from "../utils/constant";
 
 export const AppContext = createContext();
 
@@ -14,12 +14,12 @@ const AppContextProvider = (props) => {
     const [credit, setCredit] = useState(false);
     const navigate = useNavigate();
 
-    const backend_url = import.meta.env.VITE_BACKEND_URL;
+    
 
     const getCredits = async () => {
         try {
             /* get credits */
-            const { data } = await axios.get(`${backend_url}/api/user/credits`, {
+            const { data } = await axios.get(`${BACKEND_API_END_POINT}/api/user/credits`, {
                 headers: {
                     "Content-Type": "application/json",
                     token, // Add the token in headers
@@ -40,7 +40,7 @@ const AppContextProvider = (props) => {
 
     const generateImage = async(prompt) => {
         try {
-            const { data } = await axios.post(`${backend_url}/api/image/gen-image`, {prompt},{headers:{token}})
+            const { data } = await axios.post(`${BACKEND_API_END_POINT}/api/image/gen-image`, {prompt},{headers:{token}})
             if(data.success) {
                 getCredits()
                 return data.resultImage
@@ -70,7 +70,7 @@ const AppContextProvider = (props) => {
     },[token])
 
     const value = {
-        user, setUser, showLogin, setShowLogin, backend_url, token, setToken, credit, setCredit, getCredits, logout, generateImage
+        user, setUser, showLogin, setShowLogin, BACKEND_API_END_POINT, token, setToken, credit, setCredit, getCredits, logout, generateImage
     }
 
     return(

@@ -26,6 +26,3 @@ const Description = () => {
 }
 
 export default Description
-
-
-/* 1.37 start */
