@@ -23,7 +23,7 @@ Gen-Image is a web application that generates images from text using AI. Built w
 ### Backend
 1. Clone the repository:
    ```sh
-   git clone https://github.com/yourusername/imagify.git
+   [git clone https://github.com/yourusername/imagify.git](https://github.com/Farooq722/Gen-Image.git)
    ```
 2. Install dependencies:
    ```sh
