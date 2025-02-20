@@ -8,15 +8,13 @@ const imgRouter = require("./routes/imageRoute");
 dotenv.config();
 const app = express();
 app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
-
-const port = process.env.PORT || 4000;
+app.use(express.json()); // Unified from both branches
 
 // Define allowed origins (Production + Development)
 const allowedOrigins = [
     "https://gen-image-fe.vercel.app", 
     "http://localhost:5173"
-  ];
+];
 
 const corsOptions = {
   origin: function (origin, callback) {
@@ -26,16 +24,23 @@ const corsOptions = {
       callback(new Error("Not allowed by CORS"));
     }
   },
-  methods: ["GET", "POST", "PUT", "DELETE","OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization", "token"],
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD", "PATCH"], // Merged all methods
+  allowedHeaders: ["Content-Type", "Authorization", "token"], // Unified headers
   credentials: true,
 };
 
 app.use(cors(corsOptions));
 
+const port = process.env.PORT || 4000;
+
 // Default route to check if backend is running
 app.get("/", (req, res) => {
-  res.send("Backend working");
+  try {
+    res.send("Backend working");
+  }
+  catch(error) {
+    res.status(500).send("Backend Not Working: " + error.message);
+  }
 });
 
 // Routes
