@@ -48,11 +48,17 @@ app.use("/api/user", router);
 app.use("/api/image", imgRouter);
 
 // Start the server
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-});
+connectDB()
+  .then(() => {
+    app.listen(port, () => {
+      console.log(`Server is running on port ${port}`);
+    });
+  })
+  .catch((error) => {
+    console.error("Failed to connect to the database:", error);
+    process.exit(1); // Exit process if DB connection fails
+  });
 
 // Connect to database
-connectDB();
 
 module.exports = app;
