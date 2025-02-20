@@ -4,9 +4,11 @@ import { AppContext } from "../context/AppContext";
 import { motion } from "framer-motion";
 import axios  from 'axios'
 import { toast } from "react-toastify";
+import RingLoader from "react-spinners/RingLoader"
 
 const Login = () => {
   const [state, setState] = useState("Login");
+  const [loader, setLoader] = useState(false);
   const { setShowLogin, BACKEND_API_END_POINT, setToken, setUser } = useContext(AppContext);
 
   const [name, setName] = useState("");
@@ -15,9 +17,9 @@ const Login = () => {
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
-
+    
     try {
-      
+      setLoader(true);
       if (state === "Login") {
         try {
           const { data } = await axios.post(
@@ -67,15 +69,15 @@ const Login = () => {
     } catch (error) {
       toast.error(error.message);
     }
+    finally {
+      setLoader(false)
+    }
   }
 
   useEffect(() => {
-    document.body.style.overflow = 'hidden';
-
-    return () => {
-        document.body.style.overflow = 'unset';
-    }
-  },[]);
+    document.body.style.overflow = "hidden";
+    return () => (document.body.style.overflow = "unset");
+  }, []);
 
   return (
     <div className="fixed top-0 left-0 right-0 bottom-0 z-10 backdrop-blur-sm bg-black/30 flex justify-center items-center">
@@ -146,6 +148,12 @@ const Login = () => {
         <button className="bg-blue-600 w-full text-white py-2 rounded-full">
           {state === "Login" ? "Login" : "Create account "}
         </button>
+
+        {loader && (
+          <div className="fixed top-0 left-0 right-0 bottom-0 z-20 bg-black/30 flex justify-center items-center">
+            <RingLoader color="white" size={50} />
+          </div>
+        )}
 
         {state === "Login" ? (
           <p className="mt-5 text-center">
