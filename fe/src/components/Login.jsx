@@ -44,7 +44,7 @@ const Login = () => {
         }
       } else {
         try {
-          const { data } = await axios.post(
+          const {data}  = await axios.post(
             `${BACKEND_API_END_POINT}/api/user/register`, 
             { name, email, password },
             { headers: { "Content-Type": "application/json" },

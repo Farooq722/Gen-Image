@@ -8,9 +8,15 @@ const imgRouter = require("./routes/imageRoute");
 dotenv.config();
 const app = express();
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
+const port = process.env.PORT || 4000;
 
 // Define allowed origins (Production + Development)
-const allowedOrigins = ["https://gen-image-fe.vercel.app", "http://localhost:5173"];
+const allowedOrigins = [
+    "https://gen-image-fe.vercel.app", 
+    "http://localhost:5173"
+  ];
 
 const corsOptions = {
   origin: function (origin, callback) {
@@ -20,35 +26,12 @@ const corsOptions = {
       callback(new Error("Not allowed by CORS"));
     }
   },
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  allowedHeaders: ["Content-Type", "Authorization"],
+  methods: ["GET", "POST", "PUT", "DELETE","OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization", "token"],
   credentials: true,
 };
 
 app.use(cors(corsOptions));
-app.options("*", cors(corsOptions));
-
-// Middleware to handle CORS headers
-app.use((req, res, next) => {
-  const origin = req.headers.origin;
-  if (allowedOrigins.includes(origin)) {
-    res.header("Access-Control-Allow-Origin", origin);
-  }
-  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
-  res.header("Access-Control-Allow-Credentials", "true");
-
-  if (req.method === "OPTIONS") {
-    return res.status(200).send("OK");
-  }
-
-  next();
-});
-
-// Set port from environment or default to 4000
-const port = process.env.PORT || 4000;
-
-app.use(express.json());
 
 // Default route to check if backend is running
 app.get("/", (req, res) => {
@@ -66,3 +49,5 @@ app.listen(port, () => {
 
 // Connect to database
 connectDB();
+
+module.exports = app;
