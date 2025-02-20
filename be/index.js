@@ -8,42 +8,56 @@ const imgRouter = require("./routes/imageRoute");
 dotenv.config();
 const app = express();
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
+const allowedOrigins = [
+    "https://gen-image-fe.vercel.app", 
+    "http://localhost:5173"
+];
 
 const corsOptions = {
-  origin: "https://gen-image-fe.vercel.app",
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  allowedHeaders: ["Content-Type", "Authorization"],
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD", "PATCH"], 
+  allowedHeaders: ["Content-Type", "Authorization", "token"], 
   credentials: true,
 };
 
 app.use(cors(corsOptions));
-app.options("*", cors(corsOptions)); 
-
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "https://gen-image-fe.vercel.app");
-  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
-  res.header("Access-Control-Allow-Credentials", "true");
-
-  if (req.method === "OPTIONS") {
-      return res.status(200).send("OK");
-  }
-
-  next();
-});
 
 const port = process.env.PORT || 4000;
 
-app.use(express.json());
-
+// Default route to check if backend is running
 app.get("/", (req, res) => {
+  try {
     res.send("Backend working");
+  }
+  catch(error) {
+    res.status(500).send("Backend Not Working: " + error.message);
+  }
 });
 
-app.use("/api/user", cors(corsOptions), router);
-app.use("/api/image", cors(corsOptions),  imgRouter);
+// Routes
+app.use("/api/user", router);
+app.use("/api/image", imgRouter);
 
-app.listen(port, () => {
-    console.log(`Port is running on ${port}`);
-});
-connectDB();
+// Start the server
+connectDB()
+  .then(() => {
+    app.listen(port, () => {
+      console.log(`Server is running on port ${port}`);
+    });
+  })
+  .catch((error) => {
+    console.error("Failed to connect to the database:", error);
+    process.exit(1); // Exit process if DB connection fails
+  });
+
+
+
+module.exports = app;
