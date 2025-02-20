@@ -65,4 +65,3 @@ Gen-Image is a web application that generates images from text using AI. Built w
 
 ## Contributing
 Feel free to fork this repository and submit pull requests.
-```` ▋
