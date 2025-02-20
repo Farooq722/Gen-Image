@@ -8,6 +8,7 @@ const imgRouter = require("./routes/imageRoute");
 dotenv.config();
 const app = express();
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json()); 
 
 // Define allowed origins (Production + Development)
 const allowedOrigins = ["https://gen-image-fe.vercel.app", "http://localhost:5173"];
