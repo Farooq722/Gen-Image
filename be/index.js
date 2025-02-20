@@ -8,8 +8,9 @@ const imgRouter = require("./routes/imageRoute");
 dotenv.config();
 const app = express();
 app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
+app.use(express.json()); // Unified from both branches
 
+// Define allowed origins (Production + Development)
 const allowedOrigins = [
     "https://gen-image-fe.vercel.app", 
     "http://localhost:5173"
@@ -23,8 +24,8 @@ const corsOptions = {
       callback(new Error("Not allowed by CORS"));
     }
   },
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD", "PATCH"], 
-  allowedHeaders: ["Content-Type", "Authorization", "token"], 
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD", "PATCH"], // Merged all methods
+  allowedHeaders: ["Content-Type", "Authorization", "token"], // Unified headers
   credentials: true,
 };
 
@@ -58,6 +59,6 @@ connectDB()
     process.exit(1); // Exit process if DB connection fails
   });
 
-
+// Connect to database
 
 module.exports = app;

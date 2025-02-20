@@ -4,9 +4,6 @@ const axios = require("axios");
 
 const generateImage = async (req, res) => {
     try {
-        res.header("Access-Control-Allow-Origin", "https://gen-image-fe.vercel.app");
-        res.header("Access-Control-Allow-Credentials", "true");
-
         const { userId, prompt } = req.body;
 
         if (!userId || !prompt) {

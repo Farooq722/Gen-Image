@@ -5,10 +5,6 @@ const userModel = require("../model/userData");
 
 const registerUser = async (req, res) => {
     try {
-        // CORS Headers
-        res.header("Access-Control-Allow-Origin", "https://gen-image-fe.vercel.app");
-        res.header("Access-Control-Allow-Credentials", "true");
-
         const { name, email, password } = req.body;
         if (!name || !email || !password) {
             return res.status(400).json({
@@ -58,9 +54,6 @@ const registerUser = async (req, res) => {
 
 const loginUser = async (req, res) => {
     try {
-        res.header("Access-Control-Allow-Origin", "https://gen-image-fe.vercel.app");
-        res.header("Access-Control-Allow-Credentials", "true");
-
         const { email, password } = req.body;
         if (!email || !password) {
             return res.status(400).json({
@@ -106,9 +99,6 @@ const loginUser = async (req, res) => {
 
 const userCredits = async (req, res) => {
     try {
-        res.header("Access-Control-Allow-Origin", "https://gen-image-fe.vercel.app");
-        res.header("Access-Control-Allow-Credentials", "true");
-
         const { userId } = req.body;
 
         const user = await userModel.findById(userId);
